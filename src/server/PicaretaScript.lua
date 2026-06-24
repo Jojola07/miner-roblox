@@ -1,28 +1,21 @@
+local workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 
-local workspace = game:GetService("Workspace")
+local pedra = workspace:WaitForChild("Pedra")
+
+local hits = 0
 
 Players.PlayerAdded:Connect(function(jogador)
     jogador.CharacterAdded:Connect(function(personagem)
         local picareta = personagem:WaitForChild("Picareta")
 
         picareta.Activated:Connect(function()
-            local raycastParams = RaycastParams.new()
-            raycastParams.FilterDescendantsInstances = {personagem}
-            raycastParams.FilterType = Enum.RaycastFilterType.Exclude
-            
-            local origem = personagem.HumanoidRootPart.Position
-            local direcao = personagem.HumanoidRootPart.CFrame.LookVector * 5
+            hits = hits + 1
+            print("Hit " .. hits)
 
-            local resultado = workspace:Raycast(origem, direcao, raycastParams)
-
-            if resultado and resultado.Instance.Name == "Pedra" then
-                print("bateu na pedra")
-            else
-                print("nada na frente")
+            if hits >= 2 then
+                pedra:Destroy()
             end
         end)
-        
     end)
 end)
-
